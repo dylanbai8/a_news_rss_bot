@@ -18,7 +18,7 @@ func PublishHtml(sourceTitle string, title string, rawLink string, html string) 
 	//)
 
 	html = html + fmt.Sprintf(
-		"<hr><p>本文章抓取自RSS，版权归源站点所有。</p><p>查看原文：<a href=\"%s\">%s - %s</p><hr><p><a href=https://t.me/ideahub_ml>加入书友群 https://t.me/ideahub_ml</a></p>",
+		"<hr><p>本文章抓取自RSS，版权归源站点所有。</p><p>查看原文：<a href=\"%s\">%s - %s</p><hr><p><a href=https://t.me/ideahub_ml>[点击] 加入书友群 @ideahub_ml</a></p>",
 		rawLink,
 		title,
 		sourceTitle,
