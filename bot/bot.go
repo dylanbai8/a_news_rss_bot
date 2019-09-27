@@ -466,14 +466,16 @@ func makeHandle() {
 
 	B.Handle("/help", func(m *tb.Message) {
 		message := `
-命令：
-/sub 订阅源
-/unsub  取消订阅
-/list 查看当前订阅源
-/set 设置订阅
-/help 帮助
-/import 导入OPML文件
-详细使用方法请看：https://github.com/indes/flowerss-bot
+使用命令：
+
+/sub - 添加订阅
+/unsub - 取消订阅
+/list - 查看当前订阅
+/set - 设置推送模式
+/import - 导入OPML文件
+/help - 帮助菜单
+
+加入书友群 @ideahub_ml
 `
 		_, _ = B.Send(m.Chat, message)
 	})
