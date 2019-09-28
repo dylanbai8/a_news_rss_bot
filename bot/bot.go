@@ -217,7 +217,7 @@ func makeHandle() {
 	B.Handle("/start", func(m *tb.Message) {
 		user := model.FindOrInitUser(m.Chat.ID)
 		log.Printf("/start %d", user.ID)
-		_, _ = B.Send(m.Chat, fmt.Sprintf("你好，欢迎使用flowerss。"))
+		_, _ = B.Send(m.Chat, fmt.Sprintf("欢迎使用！ /help  打开帮助菜单。"))
 	})
 
 	B.Handle("/export", func(m *tb.Message) {
