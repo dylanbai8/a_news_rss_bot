@@ -54,7 +54,7 @@ func init() {
 	viper.SetConfigName("rss_bot_config") // name of config file (without extension)
 	viper.AddConfigPath(".")
 	viper.AddConfigPath(fmt.Sprintf("$HOME/.%s", projectName))              // call multiple times to add many search paths
-	viper.AddConfigPath(fmt.Sprintf("/usr/local/bin", projectName)) // path to look for the config file in
+	viper.AddConfigPath("/usr/local/bin") // path to look for the config file in
 
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
