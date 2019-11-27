@@ -587,6 +587,8 @@ func makeHandle() {
 /list - 查看当前订阅
 /set - 设置推送模式
 /import - 导入OPML文件
+/export - 导出 OPML 文件
+/unsuball - 取消所有订阅
 /help - 帮助菜单
 
 加入书友群 @ideahub_ml

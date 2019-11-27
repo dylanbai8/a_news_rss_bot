@@ -1,0 +1,32 @@
+
+curl https://api.telegra.ph/createAccount?short_name=ideahub01&author_name=ideahub01&author_url=https://ideahub01.ml
+
+curl https://api.telegra.ph/createAccount?short_name=ideahub02&author_name=ideahub02&author_url=https://ideahub02.ml
+
+curl https://api.telegra.ph/createAccount?short_name=ideahub03&author_name=ideahub03&author_url=https://ideahub03.ml
+
+curl https://api.telegra.ph/createAccount?short_name=ideahub04&author_name=ideahub04&author_url=https://ideahub04.ml
+
+curl https://api.telegra.ph/createAccount?short_name=ideahub05&author_name=ideahub05&author_url=https://ideahub05.ml
+
+
+
+cat <<EOF > /usr/local/bin/rss_bot_config.yml
+bot_token: 627335845:AAGojaZAMUn5ePrb04W9OwMpe91zsmy-LUk
+telegraph_token:
+ - 4eeb9bf67916810a24e53ad80ab528ae3724d19a522261afb8d3b67e597f
+ - ccebd0b7c2168c119fe536700017587ef99fd196fa283d31364f35572ba9
+ - 70a4502a3991ee5564625403f1d71bbad86456f489d9fc8768702f59a2c5
+ - 3a9e7c493b1f230266ec9909ea0705dc7d66d83983c2f9b8163fb10fe202
+ - eeb3379b96422d9dcbb1975fff2612332bcb8537d5d7f525586c25b0366d
+update_interval: 10
+error_threshold: 100
+mysql:
+  host: 127.0.0.1
+  port: 3306
+  user: a_news_rss_bot
+  password: Qq130130
+  database: a_news_rss_bot
+EOF
+
+
