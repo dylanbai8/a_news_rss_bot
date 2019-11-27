@@ -7,6 +7,7 @@
 
 DEMO: [https://t.me/rssflowbot](https://t.me/rssflowbot)  
 [问题反馈群组](https://t.me/joinchat/FJ-cikd-yN1Bf1SxWbAKjw)
+[Change Log](CHANGELOG.md)
 
 <img src="https://github.com/rssflow/img/raw/master/images/rssflow_demo.gif" width = "300"/>
 
@@ -45,7 +46,12 @@ make build
 
 ```yml
 bot_token: XXX
+#多个telegraph_token可采用数组格式：
+# telegraph_token:
+#  - token_1
+#  - token_2
 telegraph_token: xxxx
+preview_text: 0
 socks5: 127.0.0.1:1080
 update_interval: 10
 error_threshold: 100
@@ -64,11 +70,12 @@ sqlite:
 | 配置项          | 含义                                      | 必填                                       |
 | --------------- | ----------------------------------------- | ------------------------------------------ |
 | bot_token       | Telegram Bot Token                        | 必填                                       |
-| telegraph_token | Telegraph Token, 用于转存原文到 Telegraph | 可忽略（不转存原文到 Telegraph ）          |
-| update_interval | RSS 源扫描间隔（分钟）                    | 可忽略（默认 10）                          |
-| error_threshold | 源最大出错次数                    | 可忽略（默认 100）                          |
-| socks5          | 用于无法正常 Telegram API 的环境          | 可忽略（能正常连接上 Telegram API 服务器） |
-| mysql           | MySQL 数据库配置                          | 可忽略（使用 SQLite ）                     |
+| telegraph_token | Telegraph Token, 用于转存原文到 Telegraph   | 可忽略（不转存原文到 Telegraph ）          |
+| preview_text    | 纯文字预览字数（不借助Telegraph）            |可忽略（默认0, 0为禁用）
+| update_interval | RSS 源扫描间隔（分钟）                      | 可忽略（默认 10）                          |
+| error_threshold | 源最大出错次数                              | 可忽略（默认 100）                          |
+| socks5          | 用于无法正常 Telegram API 的环境            | 可忽略（能正常连接上 Telegram API 服务器） |
+| mysql           | MySQL 数据库配置                           | 可忽略（使用 SQLite ）                     |
 | sqlite          | SQLite 配置                               | 可忽略（已配置mysql时，该项失效）          |
 
 ### Telegraph Token 申请
@@ -88,7 +95,9 @@ curl https://api.telegra.ph/createAccount?short_name=flowerss&author_name=flower
 /unsub [url] 取消订阅（url 为可选）
 /list 查看当前订阅
 /set 设置订阅
-/import 导入OPML文件
+/import 导入 OPML 文件
+/export 导出 OPML 文件
+/unsuball 取消所有订阅
 /help 帮助
 ```
 
@@ -103,6 +112,7 @@ Channel 订阅支持的命令：
 /sub @ChannelID [url] 订阅
 /unsub @ChannelID [url] 取消订阅
 /list @ChannelID 查看当前订阅
+/unsuball @ChannelID 取消所有订阅
 ```
 
 **ChannelID 只有设置为 Public Channel 才有。如果是 Private Channel，可以暂时设置为 Public，订阅完成后改为 Private，不影响 Bot 推送消息。**
@@ -111,6 +121,11 @@ Channel 订阅支持的命令：
 
 1. 将 Bot 添加到 debug 频道管理员列表中
 2. 给 Bot 发送 `/sub @debug http://www.ruanyifeng.com/blog/atom.xml` 命令
+
+## 常见问题
+* Q：日志中大量类似于`Create telegraph page error: FLOOD_WAIT_7`的提示  
+  A：原因是创建telegraph页面请求过快触发了接口限制，可尝试在配置文件中添加多个telegraph token
+
 
 ### 问题反馈
 

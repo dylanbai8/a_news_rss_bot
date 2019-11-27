@@ -2,10 +2,13 @@ package bot
 
 import (
 	"fmt"
+	strip "github.com/grokify/html-strip-tags-go"
 	"github.com/indes/flowerss-bot/config"
 	"github.com/indes/flowerss-bot/model"
 	tb "gopkg.in/tucnak/telebot.v2"
 	"log"
+	"regexp"
+	"strings"
 )
 
 func FeedForChannelRegister(m *tb.Message, url string, channelMention string) {
@@ -102,34 +105,71 @@ func BroadNews(source *model.Source, subs []model.Subscribe, contents []model.Co
 
 			u.ID = int(sub.UserID)
 
+			previewText := ""
+
+			if config.PreviewText > 0 {
+				contentDesc := strings.Trim(
+					strip.StripTags(
+						regexp.MustCompile(`\n+`).ReplaceAllLiteralString(
+							strings.ReplaceAll(
+								regexp.MustCompile(`<br(| /)>`).ReplaceAllString(content.Description, "<br>"),
+								"<br>", "\n"),
+							"\n")),
+					"\n")
+
+				contentDescRune := []rune(contentDesc)
+
+				previewText += "\n<b>---------- Preview ----------</b>\n"
+				if len(contentDescRune) > config.PreviewText {
+					previewText += string(contentDescRune[0:config.PreviewText])
+				} else {
+					previewText += contentDesc
+				}
+				previewText += "\n<b>-----------------------------</b>"
+			}
+
 			if sub.EnableTelegraph == 1 && content.TelegraphUrl != "" {
 				message = `
-*%s*
-%s
-[Telegraph](%s) | [原文](%s) | [加入书友群](https://t.me/ideahub_ml)
+<b>%s</b>%s
+%s | <a href="%s">Telegraph</a> | <a href="%s">原文</a>
 `
-				message = fmt.Sprintf(message, source.Title, content.Title, content.TelegraphUrl, content.RawLink)
+				message = fmt.Sprintf(message, source.Title, previewText, content.Title, content.TelegraphUrl, content.RawLink)
 				_, err := B.Send(&u, message, &tb.SendOptions{
 					DisableWebPagePreview: false,
-					ParseMode:             tb.ModeMarkdown,
+					ParseMode:             tb.ModeHTML,
 					DisableNotification:   disableNotification,
 				})
+
 				if err != nil {
 					log.Println(err)
+					if strings.Contains(err.Error(), "Forbidden") {
+						log.Printf("Unsubscribe UserID:%d SourceID:%d", sub.UserID, sub.SourceID)
+						_ = sub.Unsub()
+					}
 				}
+
 			} else {
 				message = `
-<b>%s</b>
+<b>%s</b>%s
 <a href="%s">%s</a>
 `
-				message = fmt.Sprintf(message, source.Title, content.RawLink, content.Title)
+				message = fmt.Sprintf(message, source.Title, previewText, content.RawLink, content.Title)
+
 				_, err := B.Send(&u, message, &tb.SendOptions{
 					DisableWebPagePreview: true,
 					ParseMode:             tb.ModeHTML,
 					DisableNotification:   disableNotification,
 				})
+
 				if err != nil {
 					log.Println(err)
+					if err != nil {
+						log.Println(err)
+						if strings.Contains(err.Error(), "Forbidden") {
+							log.Printf("Unsubscribe UserID:%d SourceID:%d", sub.UserID, sub.SourceID)
+							_ = sub.Unsub()
+						}
+					}
 				}
 			}
 		}
@@ -178,6 +218,22 @@ func CheckAdmin(upd *tb.Update) bool {
 	return false
 }
 
+func UserIsAdminChannel(userID int, channelChat *tb.Chat) (isAdmin bool) {
+	adminList, err := B.AdminsOf(channelChat)
+	isAdmin = false
+
+	if err != nil {
+		return
+	}
+
+	for _, admin := range adminList {
+		if userID == admin.User.ID {
+			isAdmin = true
+		}
+	}
+	return
+}
+
 func HasAdminType(t tb.ChatType) bool {
 	hasAdmin := []tb.ChatType{tb.ChatGroup, tb.ChatSuperGroup, tb.ChatChannel, tb.ChatChannelPrivate}
 	for _, n := range hasAdmin {
@@ -186,6 +242,18 @@ func HasAdminType(t tb.ChatType) bool {
 		}
 	}
 	return false
+}
+
+func GetMentionFromMessage(m *tb.Message) (mention string) {
+	for _, entity := range m.Entities {
+		if entity.Type == tb.EntityMention {
+			if mention == "" {
+				mention = m.Text[entity.Offset : entity.Offset+entity.Length]
+
+			}
+		}
+	}
+	return
 }
 
 func GetUrlAndMentionFromMessage(m *tb.Message) (url string, mention string) {

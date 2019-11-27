@@ -15,6 +15,7 @@ var (
 	Socks5          string
 	TelegraphToken  []string
 	EnableTelegraph bool
+	PreviewText     int = 0
 	Mysql           MysqlConfig
 	SQLitePath      string
 	EnableMysql     bool
@@ -43,18 +44,19 @@ func init() {
 	fmt.Println(logo)
 	telegramTokenCli := flag.String("b", "", "Telegram Bot Token")
 	telegraphTokenCli := flag.String("t", "", "Telegraph API Token")
-	dbPathCli := flag.String("dbpath", "", "Telegraph API Token")
+	previewTextCli := flag.Int("p", 0, "Preview Text Length")
+	dbPathCli := flag.String("dbpath", "", "SQLite DB Path")
 	errorThresholdCli := flag.Int("threshold", 0, "Error Threshold")
 	socks5Cli := flag.String("s", "", "Socks5 Proxy")
 	intervalCli := flag.Int("i", 0, "Update Interval")
 	flag.Parse()
 
-	projectName := "rss_bot"
+	projectName := "flowerss-bot"
 
-	viper.SetConfigName("rss_bot_config") // name of config file (without extension)
+	viper.SetConfigName("config") // name of config file (without extension)
 	viper.AddConfigPath(".")
 	viper.AddConfigPath(fmt.Sprintf("$HOME/.%s", projectName))              // call multiple times to add many search paths
-	viper.AddConfigPath("/usr/local/bin") // path to look for the config file in
+	viper.AddConfigPath(fmt.Sprintf("/data/docker/config/%s", projectName)) // path to look for the config file in
 
 	err := viper.ReadInConfig() // Find and read the config file
 	if err != nil {             // Handle errors reading the config file
@@ -85,6 +87,16 @@ func init() {
 	} else {
 		EnableTelegraph = true
 		TelegraphToken = append(TelegraphToken, *telegraphTokenCli)
+	}
+
+	if *previewTextCli == 0 {
+		if viper.IsSet("preview_text") {
+			PreviewText = viper.GetInt("preview_text")
+		} else {
+			PreviewText = 0
+		}
+	} else {
+		PreviewText = 0
 	}
 
 	if *errorThresholdCli == 0 {
@@ -155,5 +167,5 @@ func (m *MysqlConfig) GetMysqlConnectingString() string {
 	host := m.Host
 	port := m.Port
 	db := m.DB
-	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8&parseTime=true", usr, pwd, host, port, db)
+	return fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=true", usr, pwd, host, port, db)
 }
