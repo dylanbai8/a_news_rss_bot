@@ -130,8 +130,9 @@ func BroadNews(source *model.Source, subs []model.Subscribe, contents []model.Co
 
 			if sub.EnableTelegraph == 1 && content.TelegraphUrl != "" {
 				message = `
-<b>%s</b>%s
-%s | <a href="%s">Telegraph</a> | <a href="%s">原文</a>
+*%s*
+%s
+[Telegraph](%s) | [原文](%s) | [加入书友群](https://t.me/ideahub_ml)
 `
 				message = fmt.Sprintf(message, source.Title, previewText, content.Title, content.TelegraphUrl, content.RawLink)
 				_, err := B.Send(&u, message, &tb.SendOptions{

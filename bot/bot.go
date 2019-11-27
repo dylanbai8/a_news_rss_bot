@@ -244,7 +244,7 @@ func makeHandle() {
 	B.Handle("/start", func(m *tb.Message) {
 		user := model.FindOrInitUser(m.Chat.ID)
 		log.Printf("/start %d", user.ID)
-		_, _ = B.Send(m.Chat, fmt.Sprintf("你好，欢迎使用flowerss。"))
+		_, _ = B.Send(m.Chat, fmt.Sprintf("欢迎使用！ /help  打开帮助菜单。"))
 	})
 
 	B.Handle("/export", func(m *tb.Message) {
@@ -580,16 +580,16 @@ func makeHandle() {
 
 	B.Handle("/help", func(m *tb.Message) {
 		message := `
-命令：
-/sub 订阅源
-/unsub  取消订阅
-/list 查看当前订阅源
-/set 设置订阅
-/help 帮助
-/import 导入 OPML 文件
-/export 导出 OPML 文件
-/unsuball 取消所有订阅
-详细使用方法请看：https://github.com/indes/flowerss-bot
+使用命令：
+
+/sub - 添加订阅
+/unsub - 取消订阅
+/list - 查看当前订阅
+/set - 设置推送模式
+/import - 导入OPML文件
+/help - 帮助菜单
+
+加入书友群 @ideahub_ml
 `
 		_, _ = B.Send(m.Chat, message)
 	})

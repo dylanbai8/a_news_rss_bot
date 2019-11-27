@@ -51,10 +51,10 @@ func init() {
 	intervalCli := flag.Int("i", 0, "Update Interval")
 	flag.Parse()
 
-	projectName := "flowerss-bot"
+	projectName := "rss_bot"
 
-	viper.SetConfigName("config") // name of config file (without extension)
-	viper.AddConfigPath(".")
+	viper.SetConfigName("rss_bot_config") // name of config file (without extension)
+	viper.AddConfigPath("/usr/local/bin") // path to look for the config file in
 	viper.AddConfigPath(fmt.Sprintf("$HOME/.%s", projectName))              // call multiple times to add many search paths
 	viper.AddConfigPath(fmt.Sprintf("/data/docker/config/%s", projectName)) // path to look for the config file in
 
