@@ -10,6 +10,6 @@ require (
 	github.com/jinzhu/gorm v1.9.11
 	github.com/spf13/viper v1.4.0
 	go.uber.org/zap v1.10.0
-	golang.org/x/net v0.0.0-20191014212845-da9a3fd4c582
+	golang.org/x/net v0.7.0
 	gopkg.in/tucnak/telebot.v2 v2.0.0-20191005061224-d0707a9d73c4
 )
