@@ -590,8 +590,6 @@ func makeHandle() {
 /export - 导出 OPML 文件
 /unsuball - 取消所有订阅
 /help - 帮助菜单
-
-加入书友群 @ideahub_ml
 `
 		_, _ = B.Send(m.Chat, message)
 	})

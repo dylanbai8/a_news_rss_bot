@@ -132,7 +132,7 @@ func BroadNews(source *model.Source, subs []model.Subscribe, contents []model.Co
 				message = `
 <b>%s</b>%s
 %s
-<a href="%s">Telegraph</a> | <a href="%s">原文</a> | <a href="https://t.me/ideahub_ml">加入书友群</a>
+<a href="%s">Telegraph</a> | <a href="%s">原文链接</a> | <a href="https://t.me/rssmenu">频道大全</a>
 `
 				message = fmt.Sprintf(message, source.Title, previewText, content.Title, content.TelegraphUrl, content.RawLink)
 				_, err := B.Send(&u, message, &tb.SendOptions{
