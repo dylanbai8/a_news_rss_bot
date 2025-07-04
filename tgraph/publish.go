@@ -18,10 +18,7 @@ func PublishHtml(sourceTitle string, title string, rawLink string, html string) 
 	//)
 
 	html = html + fmt.Sprintf(
-		"<hr><p>本文章抓取自RSS，版权归源站点所有。</p>",
-		rawLink,
-		title,
-		sourceTitle,
+		"<hr><p>本文章抓取自RSS，版权归源站点所有。</p>"
 	)
 	rand.Seed(time.Now().Unix()) // initialize global pseudo random generator
 	client := clientPool[rand.Intn(len(clientPool))]
